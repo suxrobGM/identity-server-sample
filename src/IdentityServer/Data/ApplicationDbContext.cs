@@ -31,7 +31,8 @@ namespace IdentityServer.Data
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS; Initial Catalog=TestIdentityServerDB; Trusted_Connection=True");
 
-            return new ApplicationDbContext(optionsBuilder.Options, new OptionsWrapper<OperationalStoreOptions>(new OperationalStoreOptions()));
+            return new ApplicationDbContext(optionsBuilder.Options, 
+                new OptionsWrapper<OperationalStoreOptions>(new OperationalStoreOptions()));
         }
     }
 }

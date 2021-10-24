@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using IdentityServer.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace IdentityServer.Data
 {
@@ -11,7 +12,21 @@ namespace IdentityServer.Data
     {
         public static async void Initialize(IServiceProvider service)
         {
+            await MigrateDatabaseAsync(service);
             await CreateUsers(service);
+        }
+        
+        private static async Task MigrateDatabaseAsync(IServiceProvider serviceProvider)
+        {
+            try
+            {
+                var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>();
+                await dbContext.Database.MigrateAsync();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
         }
 
         private static async Task CreateUsers(IServiceProvider service)
@@ -21,20 +36,17 @@ namespace IdentityServer.Data
                 var userManager = service.GetRequiredService<UserManager<ApplicationUser>>();
                 var users = new List<ApplicationUser>()
                 {
-                    new ApplicationUser()
-                    {
+                    new() {
                         UserName = "TestUser1",
                         Email = "TestUser1@mail.ru",
                     },
 
-                    new ApplicationUser()
-                    {
+                    new() {
                         UserName = "TestUser2",
                         Email = "TestUser2@mail.ru",
                     },
 
-                    new ApplicationUser()
-                    {
+                    new() {
                         UserName = "TestUser3",
                         Email = "TestUser3@mail.ru",
                     }

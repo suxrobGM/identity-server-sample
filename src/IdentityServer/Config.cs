@@ -5,21 +5,11 @@ namespace IdentityServer
 {
     public static class Config
     {
-        public static IList<ApiScope> GetApiScopes()
-        {
-            return new List<ApiScope>
-            {
-                new ApiScope("api.admin"),
-                new ApiScope("api.client")
-            };
-        }
-
         public static IList<ApiResource> GetApiResources()
         {
             return new List<ApiResource>
             {
-                new ApiResource("api", "My API")
-                {
+                new("api", "My API") {
                     Enabled = true,
                     Scopes = {"api.admin", "api.client"},
                 }
@@ -30,24 +20,21 @@ namespace IdentityServer
         {
             return new List<Client>
             {
-                new Client
-                {
+                new() {
                     ClientId = "client1",
                     AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
                     RequireClientSecret = false,
                     AllowedScopes = { "api.client" },
                 },
 
-                new Client
-                {
+                new() {
                     ClientId = "client2",
 
                     // no interactive user, use the clientid/secret for authentication
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
 
                     // secret for authentication
-                    ClientSecrets =
-                    {
+                    ClientSecrets = {
                         new Secret("secret".Sha256())
                     },
 
@@ -55,14 +42,17 @@ namespace IdentityServer
                     AllowedScopes = { "api.client" },
                 },
 
-                new Client
-                {
+                new() {
                     ClientId = "client3",
                     AllowedGrantTypes = GrantTypes.Code, // authorization code
                     RequireClientSecret = false,
-                    ClientSecrets = {
-                        new Secret("secret".Sha256())
-                    },
+                    AllowedScopes = { "api.client" }
+                },
+                
+                new() {
+                    ClientId = "client4",
+                    AllowedGrantTypes = GrantTypes.DeviceFlow,
+                    RequireClientSecret = false,
                     AllowedScopes = { "api.client" }
                 }
             };
